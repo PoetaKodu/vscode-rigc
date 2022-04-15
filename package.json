@@ -2,7 +2,7 @@
     "name": "vscode-rigc",
     "displayName": "RigC Language Support",
     "description": "A RigC language support extension for Visual Studio Code",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.66.0"
     },
