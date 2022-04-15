@@ -1,0 +1,488 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "RigC",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#class-declaration"
+		},
+		{
+			"include": "#function-definition"
+		},
+		{
+			"include": "#template-decl"
+		},
+		{
+			"include": "#import-statement"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#keywords"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.rigc",
+					"match": "\\b(if|else|ret|while|for|break|continue|and|or|not|in|of)\\b"
+				},
+				{
+					"name": "keyword",
+					"match": "\\b(var|let|func|class|Self|override|pub|priv|prot|alias|concept|requires)\\b"
+				},
+				{ "include": "#expr-keyword" }
+			]
+		},
+		"import-statement": {
+			"begin": "\\b(import)\\s*(([\\w\\.][\\w0-9\\.]*)|(\"[^\"]+\"))\\s*",
+			"end": "(?<=[\\}\\;])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.rigc"
+				},
+				"4": {
+					"name": "string.quoted.double.rigc"
+				}
+			},
+			"patterns": [
+				{
+					"name": "keyword.rigc",
+					"match": "\\b(as|from)\\b"
+				}
+			]
+		},
+		"expr-keyword": {
+			"patterns": [
+				{
+					"name": "keyword",
+					"match": "\\b(self|null)\\b"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{ "include": "#string-literal" },
+				{ "include": "#char-literal" }
+			]
+		},
+		"string-literal": {
+			"name": "string.quoted.double.rigc",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.rigc",
+					"match": "\\\\."
+				}
+			]
+		},
+		"char-literal": {
+			"name": "string.quoted.single.rigc",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.rigc",
+					"match": "\\\\."
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.rigc",
+					"match": "\\b(0x[0-9a-fA-F]+|[0-9]+(\\.[0-9]*f?)?)\\b"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.rigc",
+					"begin": "//",
+					"end": "$",
+					"patterns": [
+						{
+							"include": "#doc-comments"
+						}
+					]
+				},
+				{
+					"name": "comment.block.rigc",
+					"begin": "/\\*",
+					"end": "\\*/"
+				}
+			]
+		},
+		"template-decl": {
+			"name": "meta.template.rigc",
+			"begin": "\\b(template)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.template.rigc"
+				}
+			},
+			"end": "(?=\\>)",
+			"patterns": [
+				{ "include": "#template-decl-parameters" }
+			]
+		},
+		"template-decl-parameters": {
+			"patterns": [
+				{
+					"name": "meta.template-parameters.rigc",
+					"begin": "\\<",
+					"end": "\\>",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#template-decl-perameter-list" }
+					]
+				}
+			]
+		},
+		"template-decl-perameter-list": {
+			"patterns": [
+				{
+					"name": "meta.parameter.list.rigc",
+					"begin": "\\b(([0-9]+)|([a-z_][a-zA-Z0-9_]*)|([A-Z][a-zA-Z0-9_]*))\\b",
+					"end": "\\s*(?=\\,|\\>|\\:|\\<)",
+					"beginCaptures": {
+						"2": {
+							"name": "constant.numeric.rigc"
+						},
+						"3": {
+							"name": "variable.parameter.rigc"
+						},
+						"4": {
+							"name": "entity.name.type"
+						}
+					}
+				}
+			]
+		},
+		"function-definition": {
+			"name": "meta.function.rigc",
+			"begin": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))(?:(\\bexport)\\s+)?\\b(func)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.export.rigc"
+				},
+				"2": {
+					"name": "keyword.rigc"
+				},
+				"3": {
+					"name": "entity.name.function.rigc"
+				}
+			},
+			"end": "(?<=\\})",
+			"patterns": [
+				{ "include": "#parameters" },
+				{ "include": "#function-body" }
+			]
+		},
+		"parameters": {
+			"patterns": [
+				{
+					"name": "meta.parameter.rigc",
+					"begin": "\\(",
+					"end": "\\)",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#parameter-list" }
+					]
+				}
+			]
+		},
+		"parameter-list": {
+			"patterns": [
+				{
+					"name": "meta.parameter.list.rigc",
+					"begin": "\\b((self)|([a-zA-Z_][a-zA-Z0-9_]*))\\b",
+					"end": "\\s*(?=\\,|\\))",
+					"beginCaptures": {
+						"2": {
+							"name": "keyword.rigc"
+						},
+						"3": {
+							"name": "variable.parameter.rigc"
+						}
+					},
+					"patterns": [
+						{ "include": "#explicit-parameter-type" }
+					]
+				}
+			]
+		},
+		"explicit-parameter-type": {
+			"patterns": [
+				{
+					"begin": "\\s*:\\s*\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"end": "\\s*(?=\\,|\\))",
+					"beginCaptures": {
+						"1": { "name": "entity.name.type.rigc" }
+					},
+					"patterns": [
+						{ "include": "#template-parameters" }
+					]
+				}
+			]
+		},
+		"template-parameters": {
+			"patterns": [
+				{
+					"name": "meta.template-parameters.rigc",
+					"begin": "\\<",
+					"end": "\\>",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#template-parameter-list" }
+					]
+				}
+			]
+		},
+		"template-parameter-list": {
+			"patterns": [
+				{
+					"name": "meta.template-parameter.list.rigc",
+					"begin": "\\b((Self)|([a-zA-Z_][a-zA-Z0-9_]*)|(\\-?[0-9]+))\\b",
+					"end": "\\s*(?=\\,|\\>|\\))",
+					"beginCaptures": {
+						"2": {
+							"name": "keyword.rigc"
+						},
+						"3": {
+							"name": "entity.name.type.rigc"
+						},
+						"4": {
+							"name": "constant.numeric.rigc"
+						}
+					},
+					"patterns": [
+						{ "include": "#template-parameters" }
+					]
+				}
+			]
+		},
+		"function-body": {
+			"name": "meta.method.body.rigc",
+			"begin": "\\{",
+			"end": "\\}",
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#statement" }
+			]
+		},
+		"class-declaration": {
+			"name": "meta.class.rigc",
+			"begin": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))(?:(\\bexport)\\s+)?\\b(class)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s+|/[/*]|<)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.export.rigc"
+				},
+				"2": {
+					"name": "storage.type.class.rigc"
+				},
+				"3": {
+					"name": "entity.name.type"
+				}
+			},
+			"end": "(?<=\\})",
+			"patterns": [
+				{ "include": "#class-body" },
+				{ "include": "#class-requires-clause" }
+			]
+		},
+		"class-body": {
+			"name": "meta.class.body.rigc",
+			"begin": "\\{",
+			"end": "\\}",
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#method-definition" },
+				{ "include": "#alias-declaration" },
+				{ "include": "#data-members" },
+				{ "include": "#keywords" },
+				{ "include": "#strings" },
+				{ "include": "#numbers" }
+			]
+		},
+		"class-requires-clause": {
+			"name": "meta.class.requires.rigc",
+			"begin": "\\b(requires)\\s+",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.requires.rigc"
+				}
+			},
+			"end": "(?=\\{)",
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#class-requires-list" }
+			]
+		},
+		"class-requires-list": {
+			"patterns": [
+				{
+					"name": "meta.class.requires.list.rigc",
+					"begin": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"end": "(?=\\s*(?=\\,|\\{))",
+					"beginCaptures": {
+						"1": {
+							"name": "entity.name.type.rigc"
+						}
+					}
+				}
+			]
+		},
+		"data-members": {
+			"patterns": [
+				{
+					"name": "variable.other.rigc",
+					"begin": "(\\b(pub|priv|prot)\\s+)?\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.access.rigc"
+						},
+						"5": {
+							"name": "variable.name.rigc"
+						}
+					},
+					"end": "(?=\\s*;)",
+					"patterns": [
+						{ "include": "#explicit-data-member-type" }
+					]
+				}
+			]
+		},
+		"explicit-data-member-type": {
+			"patterns": [
+				{
+					"begin": "\\s*:\\s*\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"end": "(?=\\s*;)",
+					"beginCaptures": {
+						"1": {
+							"name": "entity.name.type.rigc"
+						}
+					}
+				}
+			]
+		},
+		"method-definition": {
+			"patterns": [
+				{
+					"begin": "(\\b(pub|priv|prot)\\s+)?(\\b(override|virtual)\\s+)?\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=[\\(\\{])",
+					"end": "(?<=\\})",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.access.rigc"
+						},
+						"3": {
+							"name": "keyword.virtual.rigc"
+						},
+						"5": {
+							"name": "entity.name.function.rigc"
+						}
+					},
+					"patterns": [
+						{ "include": "#parameters" },
+						{ "include": "#function-body" }
+					]
+				}
+			]
+		},
+		"alias-declaration": {
+			"name": "meta.alias.rigc",
+			"begin": "\\b(alias)",
+			"end": "(?=\\s*;)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.alias.rigc"
+				}
+			},
+			"patterns": [
+				{ "include": "#alias-original" },
+				{ "include": "#alias-name" }
+			]
+		},
+		"alias-name": {
+			"name": "meta.alias.body.rigc",
+			"begin": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\=)",
+			"end": "(?=\\s*;)",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.type.rigc"
+				}
+			}
+		},
+		"alias-original": {
+			"name": "meta.alias.body.rigc",
+			"begin": "\\=\\s*([a-zA-Z_][a-zA-Z0-9_]*)",
+			"end": "(?=\\s*;)",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.type.rigc"
+				}
+			}
+		},
+		"statement": {
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#alias-declaration" },
+				{ "include": "#keywords" },
+				{ "include": "#strings" },
+				{ "include": "#numbers" },
+				{ "include": "#expression" },
+				{ "include": "#code-block" }
+			]
+		},
+		"expression": {
+			"patterns": [
+				{ "include": "#function-call" },
+				{ "include": "#expr-keyword" },
+				{ "include": "#identifier" },
+				{ "include": "#numbers" },
+				{ "include": "#strings" }
+			]
+		},
+		"code-block": {
+			"begin": "\\{",
+			"end": "\\}",
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#statement" }
+			]
+		},
+		"function-call": {
+			"name": "meta.function-call.rigc",
+			"begin": "\\b(([A-Z][a-zA-Z0-9_]*)|([a-z_][a-zA-Z0-9_]*))\\s*\\(",
+			"end": "(?=\\))",
+			"beginCaptures": {
+				"2": { "name": "entity.name.type.rigc" },
+				"3": { "name": "entity.name.function.rigc" }
+			},
+			"patterns": [
+				{ "include": "#expression" }
+			]
+		},
+		"identifier": {
+			"name": "variable.other.rigc",
+			"match": "\\b(([A-Z][a-zA-Z0-9_]*)|([a-z_][a-zA-Z0-9_]*))\\b",
+			"captures": {
+				"2": { "name": "entity.name.type.rigc" },
+				"3": { "name": "variable.name.rigc" }
+			}
+		},
+		"doc-comments": {
+
+		}
+	},
+	"scopeName": "source.rigc"
+}
