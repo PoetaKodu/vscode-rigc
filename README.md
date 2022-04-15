@@ -1,12 +1,14 @@
 # vscode-rigc
 
-A Visual Studio Code extension for [RigC language](https://github.com/PoetaKodu/rigc-lang).
+A Visual Studio Code extension for the [RigC language](https://github.com/PoetaKodu/rigc-lang).
 
 ![Syntax highlighting preview 1](res/preview-1.png)
 
 ## Features
 
-Syntax highlighting for RigC language.
+### Basic syntax highlighting
+
+![Syntax highlighting preview 2](res/preview-2.png)
 
 ## Requirements
 
