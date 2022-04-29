@@ -32,11 +32,11 @@
 			"patterns": [
 				{
 					"name": "keyword.control.rigc",
-					"match": "\\b(if|else|ret|while|for|break|continue|and|or|not|in|of)\\b"
+					"match": "\\b(if|else|ret|while|for|break|continue)\\b"
 				},
 				{
 					"name": "keyword",
-					"match": "\\b(var|let|func|class|Self|override|pub|priv|prot|alias|concept|requires)\\b"
+					"match": "\\b(var|let|func|class|Self|override|pub|priv|prot|alias|concept|requires|and|or|not|in|of|as|to)\\b"
 				},
 				{ "include": "#expr-keyword" }
 			]
@@ -99,7 +99,7 @@
 			"patterns": [
 				{
 					"name": "constant.numeric.rigc",
-					"match": "\\b(0x[0-9a-fA-F]+|[0-9]+(\\.[0-9]*f?)?)\\b"
+					"match": "\\b(0x[0-9a-fA-F]+|[0-9]+((\\.[0-9]*f?)|(u|l|ul|s|usuu))?)\\b"
 				}
 			]
 		},
@@ -358,7 +358,7 @@
 							"name": "variable.name.rigc"
 						}
 					},
-					"end": "(?=\\s*;)",
+					"end": "\\s*(?<=\\;)",
 					"patterns": [
 						{ "include": "#explicit-data-member-type" }
 					]
@@ -369,7 +369,7 @@
 			"patterns": [
 				{
 					"begin": "\\s*:\\s*\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
-					"end": "\\s*(?=\\,|\\))",
+					"end": "\\s*(?=\\;)",
 					"beginCaptures": {
 						"1": { "name": "entity.name.type.rigc" }
 					},
@@ -382,7 +382,7 @@
 		"method-definition": {
 			"patterns": [
 				{
-					"begin": "(\\b(pub|priv|prot)\\s+)?(\\b(override|virtual)\\s+)?\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=[\\(\\{])",
+					"begin": "(\\b(pub|priv|prot)\\s+)?(\\b(override|virtual)\\s+)?\\b(((operator)\\s*(\\+|\\-|\\*|\\/|(\\[\\])|(\\(\\))))|([a-zA-Z_][a-zA-Z0-9_]*))\\s*(?=[\\(\\{])",
 					"end": "(?<=\\})",
 					"beginCaptures": {
 						"1": {
@@ -391,7 +391,10 @@
 						"3": {
 							"name": "keyword.virtual.rigc"
 						},
-						"5": {
+						"7": {
+							"name": "keyword.rigc"
+						},
+						"11": {
 							"name": "entity.name.function.rigc"
 						}
 					},
