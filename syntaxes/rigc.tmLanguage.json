@@ -130,7 +130,7 @@
 					"name": "keyword.template.rigc"
 				}
 			},
-			"end": "(?=\\>)",
+			"end": "(?<=\\>)",
 			"patterns": [
 				{ "include": "#template-decl-parameters" }
 			]
@@ -143,12 +143,12 @@
 					"end": "\\>",
 					"patterns": [
 						{ "include": "#comments" },
-						{ "include": "#template-decl-perameter-list" }
+						{ "include": "#template-decl-parameter-list" }
 					]
 				}
 			]
 		},
-		"template-decl-perameter-list": {
+		"template-decl-parameter-list": {
 			"patterns": [
 				{
 					"name": "meta.parameter.list.rigc",
