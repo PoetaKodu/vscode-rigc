@@ -81,6 +81,16 @@
 				{
 					"name": "constant.character.escape.rigc",
 					"match": "\\\\."
+				},
+				{
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": { "name": "constant.language.rigc" }
+					},
+					"end": "(\\})|([^\"](?=\"))",
+					"endCaptures": {
+						"1": { "name": "constant.language.rigc" }
+					}
 				}
 			]
 		},
