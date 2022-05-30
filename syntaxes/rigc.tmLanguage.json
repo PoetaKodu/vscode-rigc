@@ -63,7 +63,7 @@
 			"patterns": [
 				{
 					"name": "keyword",
-					"match": "\\b(self|null)\\b"
+					"match": "\\b(self|null|false|true)\\b"
 				}
 			]
 		},
