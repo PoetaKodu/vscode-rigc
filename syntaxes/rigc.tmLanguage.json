@@ -32,7 +32,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.rigc",
-					"match": "\\b(if|else|ret|while|for|break|continue)\\b"
+					"match": "\\b(if|else|ret|while|for|break|continue|export)\\b"
 				},
 				{
 					"name": "keyword",
