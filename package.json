@@ -3,6 +3,9 @@
     "displayName": "RigC Language Support",
     "description": "A RigC language support extension for Visual Studio Code",
     "version": "0.1.0",
+    "icon": "res/logo.png",
+    "repository": "https://github.com/PoetaKodu/vscode-rigc",
+    "publisher": "PoetaKodu",
     "engines": {
         "vscode": "^1.66.0"
     },
