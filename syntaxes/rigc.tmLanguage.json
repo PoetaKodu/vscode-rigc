@@ -198,6 +198,7 @@
 			"end": "(?<=\\})",
 			"patterns": [
 				{ "include": "#parameters" },
+				{ "include": "#explicit-return-type" },
 				{ "include": "#function-body" }
 			]
 		},
@@ -239,6 +240,20 @@
 				{
 					"begin": "\\s*:\\s*\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
 					"end": "\\s*(?=\\,|\\))",
+					"beginCaptures": {
+						"1": { "name": "entity.name.type.rigc" }
+					},
+					"patterns": [
+						{ "include": "#template-parameters" }
+					]
+				}
+			]
+		},
+		"explicit-return-type": {
+			"patterns": [
+				{
+					"begin": "\\s*\\->\\s*\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"end": "\\s*(?=\\{|\\;)",
 					"beginCaptures": {
 						"1": { "name": "entity.name.type.rigc" }
 					},
@@ -392,7 +407,7 @@
 		"method-definition": {
 			"patterns": [
 				{
-					"begin": "(\\b(pub|priv|prot)\\s+)?(\\b(override|virtual)\\s+)?\\b(((operator)\\s*(\\+|\\-|\\*|\\/|(\\[\\])|(\\(\\))))|([a-zA-Z_][a-zA-Z0-9_]*))\\s*(?=[\\(\\{])",
+					"begin": "(\\b(pub|priv|prot)\\s+)?(\\b(override|virtual)\\s+)?\\b(((operator)\\s*(\\+|\\-|\\*|\\/|(\\[\\])|(\\(\\))))|([a-zA-Z_][a-zA-Z0-9_]*))\\s*(?=[\\(\\{(\\->)])",
 					"end": "(?<=\\})",
 					"beginCaptures": {
 						"1": {
@@ -410,6 +425,7 @@
 					},
 					"patterns": [
 						{ "include": "#parameters" },
+						{ "include": "#explicit-return-type" },
 						{ "include": "#function-body" }
 					]
 				}
